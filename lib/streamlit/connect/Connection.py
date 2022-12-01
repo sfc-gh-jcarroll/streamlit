@@ -13,6 +13,7 @@
 # limitations under the License.
 
 import toml
+from streamlit_toggle import st_toggle_switch
 
 import streamlit as st
 import streamlit.connect.supported as supported
@@ -50,7 +51,11 @@ def run():
     if curr_connections:
         current_conn = st.selectbox("Existing connections", curr_connections.keys())
 
-        edit_mode = st.button("Edit")
+        b1, b2, _ = st.columns(3)
+
+        edit_mode = b1.button("📝 Edit")
+        b2.button("☁️ Sync to Cloud")
+        st.write("")
 
     with st.expander("Add a new connection"):
         create_type = ""
@@ -117,7 +122,13 @@ def run():
             if "existing" in st.session_state and field in st.session_state.existing:
                 existing_val = st.session_state.existing[field]
             output[field] = conn_form.text_input(field, type=type, value=existing_val)
-        if conn_form.form_submit_button("Update Connection"):
+        form1, form2 = conn_form.columns(2)
+        with form2:
+            global_conn = st_toggle_switch(label="Shared connection?")
+            st.caption(
+                "Shared connections are saved in your home directory and accessible by all local apps"
+            )
+        if form1.form_submit_button("Update Connection"):
             current_secrets = toml.load("./.streamlit/secrets.toml")
             if "connections" not in current_secrets:
                 current_secrets["connections"] = {}
