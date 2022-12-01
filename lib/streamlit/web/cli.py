@@ -156,6 +156,17 @@ def main_hello(**kwargs):
     _main_run(filename, flag_options=kwargs)
 
 
+@main.command("connect")
+@configurator_options
+def main_connect(**kwargs):
+    """Runs the Connection wizard"""
+    from streamlit.connect import Connection
+
+    bootstrap.load_config_options(flag_options=kwargs)
+    filename = Connection.__file__
+    _main_run(filename, flag_options=kwargs)
+
+
 @main.command("run")
 @configurator_options
 @click.argument("target", required=True, envvar="STREAMLIT_RUN_TARGET")

@@ -162,7 +162,7 @@ class Secrets(Mapping[str, Any]):
                 self._maybe_set_environment_variable(k, v)
 
             self._secrets = secrets
-            self._maybe_install_file_watcher()
+            # self._maybe_install_file_watcher()
 
             return self._secrets
 
