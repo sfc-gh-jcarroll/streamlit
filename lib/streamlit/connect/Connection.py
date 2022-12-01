@@ -37,12 +37,17 @@ def run():
                 del st.session_state[key]
 
     if "success" in st.session_state:
+        ct = st.session_state["create_type"]
         st.success(
-            f"""Updated connection for {st.session_state['supported'][st.session_state['create_type']]['friendly_name']} in your secrets file"""
+            f"""Updated connection for {st.session_state['supported'][ct]['friendly_name']} in your secrets file"""
         )
         clear_state()
+        if ct in supported.funcs and "after" in supported.funcs[ct]:
+            supported.funcs[ct]["after"]()
+            st.button("Back")
+            st.stop()
 
-    if "connections" in st.secrets:
+    if curr_connections:
         current_conn = st.selectbox("Existing connections", curr_connections.keys())
 
         edit_mode = st.button("Edit")
@@ -85,10 +90,15 @@ def run():
         and st.session_state.supported[st.session_state["create_type"]]["required"]
     ):
         ct = st.session_state["create_type"]
-        conn_form = st.form("new_connection")
-        conn_form.subheader(
+        st.subheader(
             f"Create connection for {st.session_state['supported'][ct]['friendly_name']}"
         )
+        if ct in supported.funcs and "before" in supported.funcs[ct]:
+            with st.expander(
+                "Instructions", expanded="edit_mode" not in st.session_state
+            ):
+                supported.funcs[ct]["before"]()
+        conn_form = st.form("new_connection")
         output = {}
         with st.expander("Add parameter"):
             with st.form("add_param", clear_on_submit=True):

@@ -12,6 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import streamlit.connect.postgresql as postgresql
+import streamlit.connect.s3 as s3
+
 connections = {
     "snowflake": {
         "friendly_name": "Snowflake",
@@ -33,4 +36,9 @@ connections = {
     },
     "gsheets": {"friendly_name": "Google Sheets", "required": [], "secrets": []},
     "custom": {"friendly_name": "Custom connection", "required": [], "secrets": []},
+}
+
+funcs = {
+    "aws_s3": {"before": s3.before, "after": s3.after},
+    "postgresql": {"before": postgresql.before, "after": postgresql.after},
 }
