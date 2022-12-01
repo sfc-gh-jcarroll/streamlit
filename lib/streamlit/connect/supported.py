@@ -22,7 +22,7 @@ connections = {
         "secrets": ["password"],
     },
     "bigquery": {"friendly_name": "Google BigQuery", "required": [], "secrets": []},
-    "hf_dataset": {"friendly_name": "🤗 DataSet", "required": [], "secrets": []},
+    "huggingface": {"friendly_name": "🤗 DataSet", "required": ["user"], "secrets": []},
     "aws_s3": {
         "friendly_name": "AWS S3",
         "required": ["aws_access_key", "aws_secret_key", "region"],

@@ -95,9 +95,10 @@ def run():
         and st.session_state.supported[st.session_state["create_type"]]["required"]
     ):
         ct = st.session_state["create_type"]
-        st.subheader(
-            f"Create connection for {st.session_state['supported'][ct]['friendly_name']}"
-        )
+        head = f"Create connection for {st.session_state['supported'][ct]['friendly_name']}"
+        if "edit_mode" in st.session_state:
+            head = f"Edit existing connection for {st.session_state['supported'][ct]['friendly_name']}"
+        st.subheader(head)
         if ct in supported.funcs and "before" in supported.funcs[ct]:
             with st.expander(
                 "Instructions", expanded="edit_mode" not in st.session_state
